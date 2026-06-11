@@ -1,30 +1,241 @@
 # EntraLens
+# EntraLens AI Identity Security Copilot
 
-**AI-Powered Identity Security Analytics SaaS Platform**
+## Overview
 
-EntraLens is a full-demo enterprise AI SaaS application for Identity Security Analytics. It simulates Microsoft Entra ID, Azure SQL Database, Azure Functions, Azure Key Vault, Azure Monitor, Azure OpenAI, RAG knowledge base, Vision AI, natural-language SQL-style analytics, and AI tool/function calling.
+EntraLens is an AI-powered Identity Security Copilot designed for Microsoft Entra ID environments. The platform combines Identity Security Analytics, AI Intent Detection, Natural Language to SQL Query Generation, Voice Assistant capabilities, and PostgreSQL-based security investigations.
 
-## Features
+Users can ask questions in English or Bangla, and the AI automatically detects user intent, generates SQL queries, executes them against the EntraLens database, and returns real-time results.
 
-- Inactive User Detection
-- MFA Compliance Check
-- Global Administrator Audit
-- Privileged Account Monitoring
-- License Optimization
-- Orphan Account Detection
-- Conditional Access Investigation
-- Identity Governance Review
-- Access Review Assistant
-- SOC Investigation Dashboard
-- AI Risk Scoring Engine
-- AI Security Summary Dashboard
-- RAG Knowledge Base
-- Natural Language to SQL Query Generation pattern
-- Vision AI Security Analysis
-- Tool Calling & AI Agent Workflow
-- Multi-Tenant SaaS Architecture demo
-- Role-Based Access Control design
-- Reporting & Export System: CSV and PDF
+---
+
+## Problem Statement
+
+Identity administrators often struggle to investigate security incidents, inactive users, MFA compliance issues, privileged accounts, and licensing information using manual database queries.
+
+EntraLens simplifies this process by allowing administrators to interact with identity security data using natural language.
+
+---
+
+## Key Features
+
+### Identity Security Dashboard
+
+* Security KPI Cards
+* User Risk Analytics
+* Identity Security Monitoring
+* User Statistics
+* Security Investigation Output
+
+### User Management
+
+* Create User
+* Edit User
+* Delete User
+* Refresh Users
+* Auto Risk Score Calculation
+* PostgreSQL Integration
+
+### AI Intent Detection
+
+The AI understands user intent from natural language input.
+
+Examples:
+
+**English**
+
+* Show inactive users
+* Show users without MFA
+* Show high risk users
+* Show finance department users
+
+**Bangla**
+
+* ফাইন্যান্স ডিপার্টমেন্টের সব ইউজার দেখাও
+* MFA ছাড়া ইউজারগুলো দেখাও
+* হাই রিস্ক ইউজারগুলো দেখাও
+
+---
+
+## Natural Language to SQL Query Generation
+
+The platform converts user requests into SQL queries automatically.
+
+Example:
+
+User Input:
+
+Show all users from Finance department
+
+Generated SQL:
+
+SELECT * FROM users
+WHERE department = 'Finance';
+
+Example:
+
+User Input:
+
+ফাইন্যান্স ডিপার্টমেন্টের ইউজারগুলো দেখাও
+
+Generated SQL:
+
+SELECT * FROM users
+WHERE department = 'Finance';
+
+The generated query is executed against the PostgreSQL database and results are displayed instantly.
+
+---
+
+## Voice to SQL
+
+Users can also speak their requests.
+
+Workflow:
+
+Voice Input
+→ Speech Recognition
+→ Intent Detection
+→ SQL Generation
+→ Database Execution
+→ Result Display
+
+---
+
+## System Architecture
+
+User
+↓
+Web Dashboard
+↓
+AI Intent Detection Engine
+↓
+SQL Query Generator
+↓
+PostgreSQL Database
+↓
+Query Result Engine
+↓
+Dashboard Visualization
+
+---
+
+## Technology Stack
+
+### Frontend
+
+* HTML
+* CSS
+* JavaScript
+* Chart.js
+
+### Backend
+
+* Python
+* FastAPI
+
+### Database
+
+* PostgreSQL
+
+### AI Components
+
+* Intent Detection Engine
+* SQL Query Generator
+* Voice Recognition
+* AI Security Assistant
+
+---
+
+## Database Schema
+
+Main Users Table:
+
+* id
+* display_name
+* email
+* department
+* mfa_enabled
+* license_type
+* last_login_days
+* risk_score
+* account_status
+
+---
+
+## Security Features
+
+* Role Based Access Control (RBAC)
+* Login Authentication
+* User Session Management
+* Identity Risk Monitoring
+* Security Investigation Dashboard
+
+---
+
+## AI Workflow
+
+1. User enters a question.
+2. AI detects user intent.
+3. Intent is converted into SQL.
+4. SQL is executed on PostgreSQL.
+5. Results are returned to the dashboard.
+6. Security insights are displayed.
+
+---
+
+## Example Use Cases
+
+### Inactive User Detection
+
+Input:
+Show inactive users
+
+SQL:
+
+SELECT *
+FROM users
+WHERE last_login_days > 90;
+
+---
+
+### Users Without MFA
+
+Input:
+Show users without MFA
+
+SQL:
+
+SELECT *
+FROM users
+WHERE mfa_enabled = false;
+
+---
+
+### High Risk Users
+
+Input:
+Show high risk users
+
+SQL:
+
+SELECT *
+FROM users
+WHERE risk_score > 70;
+
+---
+
+## Future Enhancements
+
+* Real Microsoft Graph API Integration
+* Microsoft Entra ID Live Data
+* Azure OpenAI Integration
+* Security Copilot Integration
+* RAG Knowledge Base
+* Multi-Agent AI Architecture
+* Automated Security Recommendations
+
+---
 
 ## Full Demo Mode: Azure Service Mapping
 
@@ -185,3 +396,10 @@ Current version is full demo mode. Recommended roles:
 ## Project Status
 
 This is a portfolio/exam-ready demo foundation. It is intentionally designed to avoid Azure billing while still showing Azure production architecture knowledge.
+Author
+
+Jasmin Doja
+
+AI Engineer | Cloud Engineer
+
+Project: EntraLens AI Identity Security Copilot
