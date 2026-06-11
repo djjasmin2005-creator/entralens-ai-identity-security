@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EntraLens</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<section id="loginPage" class="login-page">
+
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="/static/images/entralens_logo.png" alt="EntraLens Logo">
+    </div>
+
+
+    <input id="loginUsername" placeholder="Username" />
+    <input id="loginPassword" type="password" placeholder="Password" />
+
+    <button onclick="loginUser()">Login</button>
+
+    <div id="loginMessage"></div>
+
+    <small>
+      Demo Login: secadmin / password1230<br>
+      Denied Demo: vmoperator / password1230
+    </small>
+  </div>
+</section>
+<div id="dashboardPage" style="display:none;">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+        <img
+            src="/static/images/entralens_logo.png"
+            class="sidebar-logo"
+            alt="EntraLens">
+    </div>
+
+    <nav class="menu">
+      <a class="active" onclick="loadDashboard()">⌂ Overview</a>
+      <p>USER MANAGEMENT</p>
+      <a onclick="showUserManagementPage()">👥 User Management</a>
+      <a onclick="showSqlQueryPage()">🧠 SQL Query</a>
+      <!-- <a onclick="showDashboardPage()">⌂ Back to Dashboard</a> -->
+      <p>IDENTITY INSIGHTS</p>
+      <a onclick="loadFeature('inactive-users')">♟ Inactive Users</a>
+      <a onclick="loadFeature('mfa-compliance')">◎ MFA Compliance</a>
+      <a onclick="loadAdmins()">♔ Global Admin Audit</a>
+      <a onclick="loadFeature('privileged-monitoring')">☷ Privileged Accounts</a>
+      <a onclick="loadFeature('license-optimization')">▣ License Optimization</a>
+      <a onclick="loadFeature('orphan-accounts')">☒ Orphan Accounts</a>
+      <a onclick="loadFeature('conditional-access')">◇ Conditional Access</a>
+      <a onclick="loadFeature('identity-governance')">◈ Identity Governance</a>
+      <a onclick="loadFeature('access-review')">▣ Access Review</a>
+
+      <p>SECURITY OPERATIONS</p>
+      <a onclick="askQuick('Show SOC suspicious alerts')">⊙ SOC Overview</a>
+      <a onclick="askQuick('Analyze identity risk score')">♧ Risk Detection</a>
+      <a onclick="askQuick('Show recent alerts and incidents')">♧ Alerts & Incidents</a>
+      <a onclick="loadFeature('conditional-access')">◎ Sign-in Investigation</a>
+
+      <p>SETTINGS</p>
+      <a onclick="askQuick('Generate identity security report')">▤ Reports</a>
+      <a onclick="askQuick('Show integration status')">⚙ Integrations</a>
+      <a onclick="askQuick('Open settings summary')">⚙ Settings</a>
+    </nav>
+
+    <div class="profile-box">
+      <div class="avatar">♟</div>
+      <div>
+        <strong>SecAdmin</strong>
+        <span>Global Administrator</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search">
+        🔍 <input id="chatInput" placeholder="Ask anything about identity security..." onkeydown="if(event.key==='Enter') sendChat()" />
+        <span>Ctrl K</span>
+      </div>
+      <div class="icons">
+        <div class="top-actions">
+          <button onclick="backToLogin()">← Back</button>
+          <button onclick="logoutUser()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h2>Welcome back, SecAdmin! 👋</h2>
+        <p>Here's what's happening with your identity security today.</p>
+      </div>
+      <button onclick="toggleAssistant()">✦ AI Assistant</button>
+    </section>
+
+    <section class="cards">
+      <div class="card"><p>Total Users</p><h3 id="totalUsers">0</h3><span class="up">↑ 12.5% from last month</span></div>
+      <div class="card"><p>Active Users</p><h3 id="activeUsers">0</h3><span class="up">↑ 8.2% from last month</span></div>
+      <div class="card"><p>Inactive Users</p><h3 id="inactiveUsers">0</h3><span class="down">↓ 4.1% from last month</span></div>
+      <div class="card"><p>Users without MFA</p><h3 id="noMfa">0</h3><span class="down">↓ 3.6% from last month</span></div>
+      <div class="card"><p>Privileged Accounts</p><h3 id="privileged">0</h3><span class="up">↑ 5.7% from last month</span></div>
+      <div class="card"><p>Risk Score</p><h3><span id="riskScore">0</span>/100</h3><span>Medium Risk</span></div>
+    </section>
+
+    <section class="grid-3">
+      <div class="panel center">
+        <h3>Identity Risk Score</h3>
+        <div class="gauge"><span id="gaugeNum">0</span><small>/100</small></div>
+        <h3 class="yellow">Medium Risk</h3>
+        <p>AI calculated risk based on identity posture</p>
+      </div>
+
+      <div class="panel">
+        <h3>Risk Score Trend</h3>
+        <canvas id="trendChart"></canvas>
+      </div>
+
+      <div class="panel ai-voice-panel">
+  <h3>✦ AI Summary</h3>
+  <ul id="summaryList"></ul>
+        <div class="voice-box">
+    <div id="voiceBubbles" class="voice-bubbles">
+      <div class="bot-bubble">Hi SecAdmin, ask me anything about identity security.</div>
+    </div>
+
+    <div class="voice-controls">
+      <button onclick="startVoiceInput()">🎙️ Ask by Voice</button>
+      <button onclick="stopSpeaking()">⏹ Stop Voice</button>
+    </div>
+
+    <div id="voiceStatus" class="voice-status">Voice assistant ready</div>
+  </div>
+
+  <button onclick="askQuick('Generate full AI identity security report')">View Full AI Report</button>
+</div>    </section>
+
+    <section class="grid-3 bottom">
+      <div class="panel">
+        <h3>Top Risky Users</h3>
+        <table>
+          <thead><tr><th>User</th><th>Risk Score</th><th>Risk Level</th><th>Issues</th></tr></thead>
+          <tbody id="riskyRows"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>Issues Distribution</h3>
+        <canvas id="issueChart"></canvas>
+      </div>
+
+      <div class="panel">
+        <h3>Recent Alerts</h3>
+        <div id="alerts"></div>
+      </div>
+    </section>
+    <section id="outputPanel" class="panel output-panel">
+      <div class="section-header">
+        <div>
+          <h3>Investigation Output</h3>
+          <p>AI investigation and feature results</p>
+        </div>
+        <button onclick="clearOutput()">Clear</button>
+        </div>
+        <div id="output">Ask EntraLens AI or select a feature from the sidebar.</div>
+      </section>
+  </main>
+
+ <script src="/static/app.js?v=40"></script>
+
+  <section id="userManagementPage" class="user-management-page" style="display:none;">
+    <div class="page-header">
+    <div>
+      <h2>Identity User Management</h2>
+      <p>Manage identity records, MFA status, licenses, login activity, and AI risk score.</p>
+    </div>
+    <button onclick="showDashboardPage()">← Back to Dashboard</button>
+  </div>
+
+
+  <section class="panel user-management">
+    <div class="section-header">
+      <div>
+        <h3>User Administration</h3>
+        <p>Live PostgreSQL CRUD with automatic risk score calculation</p>
+      </div>
+
+      <div class="mini-kpi">
+        <span>Total Users</span>
+        <strong id="userManagementCount">0</strong>
+      </div>
+    </div>
+
+    <input type="hidden" id="editUserId">
+
+    <div class="user-form">
+      <input id="userName" placeholder="Full Name">
+      <input id="userEmail" placeholder="Email">
+      <input id="userDepartment" placeholder="Department">
+
+      <select id="userMfa" onchange="autoCalculateRisk()">
+        <option value="true">MFA Enabled</option>
+        <option value="false">MFA Disabled</option>
+      </select>
+
+      <select id="userLicense" onchange="autoCalculateRisk()">
+        <option value="E3">E3</option>
+        <option value="E5">E5</option>
+        <option value="None">None</option>
+      </select>
+
+      <input id="userLastLogin" type="number" placeholder="Last Login Days" oninput="autoCalculateRisk()">
+
+      <input id="userRisk" type="number" placeholder="Risk Score" readonly>
+
+      <select id="userStatus" onchange="autoCalculateRisk()">
+        <option value="active">Active</option>
+        <option value="terminated">Terminated</option>
+      </select>
+
+      <button id="saveUserBtn" onclick="saveUser()">Add User</button>
+      <button type="button" onclick="clearUserForm()">Clear</button>
+      <button type="button" onclick="refreshUsers()">Refresh Users</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>MFA</th>
+          <th>License</th>
+          <th>Last Login</th>
+          <th>Risk</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </section>
+
+</section>
+  <section id="sqlQueryPage" class="sql-query-page" style="display:none;">
+  <div class="page-header">
+    <div>
+      <h2>AI Intent + SQL Query Generator</h2>
+      <p>Ask in text or voice. AI understands intent, generates SQL, runs it on EntraLens DB, and shows results.</p>
+    </div>
+    <button onclick="showDashboardPage()">← Back to Dashboard</button>
+  </div>
+
+  <section class="panel sql-panel">
+    <h3>Ask AI</h3>
+    <div class="sql-ai-box">
+      <input id="sqlAiInput" placeholder="Example: Show inactive users" />
+      <button onclick="generateSqlFromText()">Generate SQL</button>
+      <button onclick="startSqlVoiceInput()">🎙 Voice Ask</button>
+    </div>
+
+    <div id="sqlVoiceStatus" class="voice-status">SQL voice assistant ready</div>
+
+    <h3>SQL Statement:</h3>
+    <textarea id="sqlEditor">SELECT * FROM users;</textarea>
+
+    <p>Edit the SQL statement, and click "Run SQL" to see the result.</p>
+    <button onclick="runSqlQuery()">Run SQL »</button>
+
+    <h3>Result:</h3>
+    <div id="sqlResult" class="sql-result">
+      Click "Run SQL" to execute the SQL statement above.
+    </div>
+  </section>
+</section>
+</div>
+</body>
+</html>
